@@ -57,6 +57,12 @@ class Instance:
         #: Signal emitted when the focus changes to another window. Sends ``active_window_address``, the :attr:`~hyprpy.components.windows.Window.address` of the now active window, as signal data.
         self.signal_active_window_changed: Signal = Signal(self)
 
+        #: Signal emitted when a monitor is connected. Sends ``added_monitor_id``, ``added_monitor_name``, ``added_monitor_description``, the :attr:`~hyprpy.components.windows.Monitor.id`, :attr:`~hyprpy.components.windows.Monitor.name`, :attr:`~hyprpy.components.windows.Monitor.description` of the newly connected monitor, as signal data.
+        self.signal_monitor_added: Signal = Signal(self)
+
+        #: Signal emitted when a monitor is removed. Sends ``removed_monitor_name``, the :attr:`~hyprpy.components.monitors.Monitor.name` of the newly removed monitor, as signal data.
+        self.signal_monitor_removed: Signal = Signal(self)
+
 
     def __repr__(self):
         return f"<Instance(signature={self.signature!r})>"
@@ -214,6 +220,9 @@ class Instance:
                 'closewindow': self.signal_window_destroyed,
                 'activewindowv2': self.signal_active_window_changed,
 
+                'monitoraddedv2': self.signal_monitor_added,
+                'monitorremoved': self.signal_monitor_removed,
+
                 'createworkspace': self.signal_workspace_created,
                 'destroyworkspace': self.signal_workspace_destroyed,
                 'workspace': self.signal_active_workspace_changed,
@@ -238,6 +247,12 @@ class Instance:
                     signal.emit(destroyed_window_address=event_data)
                 elif event_name == 'activewindowv2':
                     signal.emit(active_window_address=(None if event_data == ',' else event_data))
+
+                elif event_name == 'monitoraddedv2':
+                    id, name, description = event_data.split(',')
+                    signal.emit(added_monitor_id=id, added_monitor_name=name, added_monitor_description=description)
+                elif event_name == 'monitorremoved':
+                    signal.emit(removed_monitor_name=None if event_data == ',' else event_data)
 
                 elif event_name == 'createworkspace':
                     signal.emit(created_workspace_id=(int(event_data) if event_data not in ['special', 'special:special'] else -99))
