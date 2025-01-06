@@ -270,7 +270,13 @@ class CommandSocket(AbstractSocket):
 
         self.connect()
         self.send(message)
-        self.wait(0.5)
+
+        try:
+            self.wait(0.5)
+        except SocketError:
+            self.close()
+            raise
+
         response = self.read()
         self.close()
         return response
