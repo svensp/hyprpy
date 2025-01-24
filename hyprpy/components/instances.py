@@ -223,7 +223,7 @@ class Instance:
                 'monitoraddedv2': self.signal_monitor_added,
                 'monitorremoved': self.signal_monitor_removed,
 
-                'createworkspace': self.signal_workspace_created,
+                'createworkspacev2': self.signal_workspace_created,
                 'destroyworkspace': self.signal_workspace_destroyed,
                 'workspace': self.signal_active_workspace_changed,
             }
