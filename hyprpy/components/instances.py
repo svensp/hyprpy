@@ -254,8 +254,10 @@ class Instance:
                 elif event_name == 'monitorremoved':
                     signal.emit(removed_monitor_name=None if event_data == ',' else event_data)
 
-                elif event_name == 'createworkspace':
-                    signal.emit(created_workspace_id=(int(event_data) if event_data not in ['special', 'special:special'] else -99))
+                elif event_name == 'createworkspacev2':
+                    id, name = event_data.split(',')
+                    signal.emit(created_workspace_id=(int(id) if event_data not in ['special', 'special:special'] else -99))
+
                 elif event_name == 'destroyworkspace':
                     signal.emit(destroyed_workspace_id=(int(event_data) if event_data not in ['special', 'special:special'] else -99))
                 elif event_name == 'workspace':

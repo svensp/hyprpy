@@ -272,8 +272,8 @@ class CommandSocket(AbstractSocket):
         self.send(message)
 
         try:
-            self.wait(0.5)
-        except SocketError:
+            self.wait(5)
+        except SocketError as e:
             self.close()
             raise
 
